@@ -14,9 +14,11 @@ if [[ -n "${AWS_REGION}" ]]; then
 
         case $VALUE in ${KMS_PREFIX}:*)
             echo "AWS KMS - Decrypting Key ${KEY}..."
-            echo ${VALUE#"${KMS_PREFIX}:"} | base64 -d > "/tmp/ENV-${KEY}-cipher.blob"
-            VALUE="$(aws --region "${AWS_REGION}" kms decrypt --ciphertext-blob "/tmp/ENV-${KEY}-cipher.blob" --output text --query Plaintext | base64 -d || return $?)"
-            eval "export ${KEY}=${VALUE}"
+            CIPHER_BLOB_PATH="/tmp/ENV-${KEY}-cipher.blob"
+            echo ${VALUE#"${KMS_PREFIX}:"} | base64 -d > "${CIPHER_BLOB_PATH}"
+            VALUE="$(aws --region "${AWS_REGION}" kms decrypt --ciphertext-blob "fileb:/${CIPHER_BLOB_PATH}" --output text --query Plaintext | base64 -d || exit $?)"
+            export "${KEY}"="${VALUE}"
+            
         esac
     done
 fi
