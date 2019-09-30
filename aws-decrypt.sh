@@ -21,4 +21,4 @@ if [[ -n "${AWS_REGION}" ]]; then
     done
 fi
 
-exec /run.sh
+exec /run.sh "$@"
