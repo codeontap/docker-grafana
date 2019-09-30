@@ -16,7 +16,7 @@ if [[ -n "${AWS_REGION}" ]]; then
             echo "AWS KMS - Decrypting Key ${KEY}..."
             CIPHER_BLOB_PATH="/tmp/ENV-${KEY}-cipher.blob"
             echo ${VALUE#"${KMS_PREFIX}:"} | base64 -d > "${CIPHER_BLOB_PATH}"
-            VALUE="$(aws --region "${AWS_REGION}" kms decrypt --ciphertext-blob "fileb:/${CIPHER_BLOB_PATH}" --output text --query Plaintext | base64 -d || exit $?)"
+            VALUE="$(aws --region "${AWS_REGION}" kms decrypt --ciphertext-blob "fileb://${CIPHER_BLOB_PATH}" --output text --query Plaintext | base64 -d || exit $?)"
             export "${KEY}"="${VALUE}"
             
         esac
