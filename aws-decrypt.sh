@@ -10,7 +10,7 @@ KMS_PREFIX="${KMS_PREFIX:-"base64"}"
 if [[ -n "${AWS_REGION}" ]]; then 
     for ENV_VAR in $( printenv ); do
         KEY="$( echo "${ENV_VAR}" | cut -d'=' -f1)"
-        VALUE="$( echo "${ENV_VAR}" | cut -d'=' -f2)"
+        VALUE="$( echo "${ENV_VAR}" | cut -d'=' -f2-)"
 
         case $VALUE in ${KMS_PREFIX}:*)
             echo "AWS KMS - Decrypting Key ${KEY}..."
